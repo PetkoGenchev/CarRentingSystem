@@ -1,9 +1,9 @@
 namespace CarRentingSystem
 {
     using CarRentingSystem.Data;
+    using CarRentingSystem.Infrastructure;
     using Microsoft.AspNetCore.Builder;
     using Microsoft.AspNetCore.Hosting;
-    using Microsoft.AspNetCore.Identity;
     using Microsoft.EntityFrameworkCore;
     using Microsoft.Extensions.Configuration;
     using Microsoft.Extensions.DependencyInjection;
@@ -17,24 +17,31 @@ namespace CarRentingSystem
 
         public void ConfigureServices(IServiceCollection services)
         {
-            // Na negoviq ima poveche neshta tuk na ostavashti 2:25:47
             services
                 .AddDbContext<CarRentingDbContext>(options => options
                 .UseSqlServer(Configuration.GetConnectionString("DefaultConnection")));
 
-            services.AddControllersWithViews();
+            //services
+            //  .AddDatabaseDeveloperPageExceptionFilter();
+
+            //services
+            //    .AddDefaultIdentity<User>(options =>
+            //    {
+            //        options.Password.RequireDigit = false;
+            //        options.Password.RequireLowercase = false;
+            //        options.Password.RequireNonAlphanumeric = false;
+            //        options.Password.RequireUppercase = false;
+            //    })
+            //    .AddRoles<IdentityRole>()
+            //    .AddEntityFrameworkStores<CarRentingDbContext>();
+
+            services
+                .AddControllersWithViews();
         }
 
         public void Configure(IApplicationBuilder app, IWebHostEnvironment env)
         {
-
-            using(var serviceScope = app.ApplicationServices.CreateScope())
-            {
-                var dbContext = serviceScope.ServiceProvider.GetRequiredService<CarRentingDbContext>();
-                dbContext.Database.Migrate();
-            }
-
-
+            app.PrepareDatabase();
 
             if (env.IsDevelopment())
             {
@@ -53,9 +60,8 @@ namespace CarRentingSystem
                 .UseAuthentication()
                 .UseEndpoints(endpoints =>
                 {
-                    endpoints.MapControllerRoute(
-                        name: "default",
-                        pattern: "{controller=Home}/{action=Index}/{id?}");
+                    endpoints.MapDefaultControllerRoute();
+                    //endpoints.MapRazorPages();
                 });
 
         }
