@@ -11,7 +11,7 @@ namespace CarRentingSystem
     public class Startup
     {
         public Startup(IConfiguration configuration) 
-            => Configuration = configuration;
+            => this.Configuration = configuration;
 
         public IConfiguration Configuration { get; }
 
@@ -19,7 +19,7 @@ namespace CarRentingSystem
         {
             services
                 .AddDbContext<CarRentingDbContext>(options => options
-                .UseSqlServer(Configuration.GetConnectionString("DefaultConnection")));
+                .UseSqlServer(this.Configuration.GetConnectionString("DefaultConnection")));
 
             //services
             //  .AddDatabaseDeveloperPageExceptionFilter();
