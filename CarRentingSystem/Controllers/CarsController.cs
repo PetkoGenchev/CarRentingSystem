@@ -20,30 +20,48 @@
             Categories = this.GetCarCategories()
         });
 
-        public IActionResult Download()
+
+        public IActionResult All()
         {
-            return File("/wwwroot/images/site.jpg","image/jpg")
-        }
+            var cars = this.data
+                .Cars
+                .OrderByDescending(c => c.Id)
+                .Select(c => new CarListingViewModel
+                {
+                    Id = c.Id,
+                    Brand = c.Brand,
+                    Model = c.Model,
+                    ImageUrl = c.ImageUrl,
+                    Year = c.Year,
+                    Category = c.Category.Name
+                })
+                .ToList();
+        
+            return View(cars);
+    }
 
 
 
+    // We use this one if we want to add files to the form + a validation + one way of saving it ( we better change the name of the file before saving it) and fix the path of saving
+
+    //using FileSystem = System.IO.File;
+
+    //public IActionResult Add(AddCarFormModel car, IFormFile image)
+    //{
+    //    if (image != null || image.Length > 2 * 1024 * 1024)
+    //    {
+    //        this.ModelState.AddModelError("Image", "The image is not valid. It is required and it should be less than 2 MB. ");
+    //    }
+    //      image.CopyTo(FileSystem.OpenWrite($"/images/{image.FileName}"));
 
 
-        // We use this one if we want to add files to the form + a validation + one way of saving it ( we better change the name of the file before saving it) and fix the path of saving
-       
-        //using FileSystem = System.IO.File;
-
-        //public IActionResult Add(AddCarFormModel car, IFormFile image)
-        //{
-        //    if (image != null || image.Length > 2 * 1024 * 1024)
-        //    {
-        //        this.ModelState.AddModelError("Image", "The image is not valid. It is required and it should be less than 2 MB. ");
-        //    }
-        //      image.CopyTo(FileSystem.OpenWrite($"/images/{image.FileName}"));
+    //public IActionResult Download()
+    //{
+    //    return File("/wwwroot/images/site.jpg", "image/jpg");
+    //}
 
 
-
-        [HttpPost]
+    [HttpPost]
         public IActionResult Add(AddCarFormModel car)
         {
 

@@ -57,6 +57,8 @@
                             <option value=@category.Id>@category.Name</option>
                         }
                     </select>
+                    <span asp-validation-for="CategoryID" class="small text-danger"></span>                
+
                 </div>
 
                 <input type="file" name="Image" />
