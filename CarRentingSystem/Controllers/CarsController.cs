@@ -15,11 +15,6 @@
         public CarsController(CarRentingDbContext data)
             => this.data = data;
 
-        public IActionResult Add() => View(new AddCarFormModel
-        {
-            Categories = this.GetCarCategories()
-        });
-
 
         public IActionResult All([FromQuery] AllCarsQueryModel query)
         {
@@ -44,7 +39,12 @@
                 CarSorting.DateCreated or _ => carsQuery.OrderByDescending(c => c.Id),
             };
 
+
+            var totalCars = carsQuery.Count();
+
             var cars = carsQuery
+                .Skip((query.CurrentPage-1) * AllCarsQueryModel.CarsPerPage)
+                .Take(AllCarsQueryModel.CarsPerPage)
                 .Select(c => new CarListingViewModel
                 {
                     Id = c.Id,
@@ -63,13 +63,12 @@
                 .OrderBy(br => br)
                 .ToList();
 
+            query.TotalCars = totalCars;
             query.Brands = carBrands;
             query.Cars = cars;
 
             return View(query);
         }
-
-
 
         // We use this one if we want to add files to the form + a validation + one way of saving it ( we better change the name of the file before saving it) and fix the path of saving
 
@@ -88,6 +87,11 @@
         //{
         //    return File("/wwwroot/images/site.jpg", "image/jpg");
         //}
+
+        public IActionResult Add() => View(new AddCarFormModel
+        {
+            Categories = this.GetCarCategories()
+        });
 
 
         [HttpPost]
