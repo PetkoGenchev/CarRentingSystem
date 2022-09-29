@@ -19,6 +19,7 @@
         public int TotalCars { get; set; }
 
         public IEnumerable<string> Brands { get; set; }
+
         public IEnumerable<CarListingViewModel> Cars { get; set; }
 
     }
