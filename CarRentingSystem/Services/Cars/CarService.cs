@@ -2,6 +2,7 @@
 {
     using CarRentingSystem.Data;
     using CarRentingSystem.Models;
+    using System.Collections.Generic;
     using System.Linq;
 
     public class CarService : ICarService
@@ -65,5 +66,13 @@
 
             };
         }
+
+        public IEnumerable<string> AllCarBrands()
+            => this.data
+                .Cars
+                .Select(c => c.Brand)
+                .Distinct()
+                .OrderBy(br => br)
+                .ToList();
     }
 }
