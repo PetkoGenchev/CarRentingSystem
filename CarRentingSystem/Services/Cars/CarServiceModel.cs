@@ -1,6 +1,6 @@
-﻿namespace CarRentingSystem.Models.Api.Cars
+﻿namespace CarRentingSystem.Services.Cars
 {
-    public class CarResponseModel
+    public class CarServiceModel
     {
         public int Id { get; init; }
 
@@ -13,5 +13,6 @@
         public int Year { get; init; }
 
         public string Category { get; init; }
+
     }
 }
